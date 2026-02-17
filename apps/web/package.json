@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.0.0",
     "@clanker/db": "workspace:*",
     "@clanker/shared": "workspace:*",
     "@prisma/client": "^6.0.0",
