@@ -1,0 +1,12 @@
+{
+  "slug": "my-pack",
+  "name": "My Pack",
+  "version": "1.0.0",
+  "description": "Short description of the pack.",
+  "skills": ["my-skill"],
+  "pass_threshold": 85,
+  "zero_hard_fails": true,
+  "pricing": {
+    "requires_purchase": false
+  }
+}

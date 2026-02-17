@@ -1,0 +1,14 @@
+{
+  "slug": "inbox-calendar-triage",
+  "name": "Inbox + Calendar Triage Agent",
+  "version": "1.0.0",
+  "description": "Agent triages, drafts, schedules with policy constraints. Priority rubric, draft templates, escalation rules.",
+  "skills": [
+    "triage-agent"
+  ],
+  "pass_threshold": 85,
+  "zero_hard_fails": true,
+  "pricing": {
+    "requires_purchase": false
+  }
+}

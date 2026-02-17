@@ -1,0 +1,14 @@
+{
+  "slug": "plugin-packaging-distribution",
+  "name": "Plugin Packaging + Team Distribution",
+  "version": "1.0.0",
+  "description": "Ship a plugin repo that installs cleanly across a team. plugin.json, versioning, install paths, release checklist.",
+  "skills": [
+    "plugin-packaging"
+  ],
+  "pass_threshold": 85,
+  "zero_hard_fails": true,
+  "pricing": {
+    "requires_purchase": false
+  }
+}

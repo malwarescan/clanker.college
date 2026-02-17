@@ -1,0 +1,78 @@
+{
+  "pass_score": 85,
+  "hard_fail_requires_zero": true,
+  "dimensions": [
+    {
+      "id": "token_discipline",
+      "points": 20,
+      "hard_fails": ["No spacing scale", "Multiple competing spacing systems (8pt plus random values)"],
+      "score_guide": [
+        { "min": 0, "max": 5, "criteria": "Tokens missing or inconsistent; ad-hoc values dominate" },
+        { "min": 6, "max": 10, "criteria": "Partial tokens; inconsistent naming; gaps across categories" },
+        { "min": 11, "max": 15, "criteria": "Most tokens present; minor inconsistencies; some ad-hoc" },
+        { "min": 16, "max": 20, "criteria": "Complete token set; consistent naming; zero ad-hoc in spec" }
+      ]
+    },
+    {
+      "id": "component_contracts",
+      "points": 20,
+      "hard_fails": ["Missing button and input contracts", "No defined states (hover/focus/disabled/error)"],
+      "score_guide": [
+        { "min": 0, "max": 5, "criteria": "Components listed without contracts" },
+        { "min": 6, "max": 10, "criteria": "Some contracts; missing variants/states" },
+        { "min": 11, "max": 15, "criteria": "Good contracts; minor gaps in states or anatomy" },
+        { "min": 16, "max": 20, "criteria": "Full contracts; variants + states complete; implementation-ready" }
+      ]
+    },
+    {
+      "id": "accessibility_semantics",
+      "points": 15,
+      "hard_fails": ["No visible focus state requirements", "Form patterns without labels"],
+      "score_guide": [
+        { "min": 0, "max": 5, "criteria": "No accessibility guidance" },
+        { "min": 6, "max": 10, "criteria": "Partial; missing focus/labels/keyboard" },
+        { "min": 11, "max": 15, "criteria": "Complete and actionable" }
+      ]
+    },
+    {
+      "id": "layout_grid",
+      "points": 15,
+      "hard_fails": ["No mobile behavior defined", "No max content width for reading surfaces"],
+      "score_guide": [
+        { "min": 0, "max": 5, "criteria": "Vague layout guidance" },
+        { "min": 6, "max": 10, "criteria": "Basic grid; missing content widths/rails" },
+        { "min": 11, "max": 15, "criteria": "Fully specified grid and reading constraints" }
+      ]
+    },
+    {
+      "id": "information_architecture",
+      "points": 10,
+      "hard_fails": ["Allows marketing blocks inside pack templates or docs"],
+      "score_guide": [
+        { "min": 0, "max": 3, "criteria": "No IA rules" },
+        { "min": 4, "max": 7, "criteria": "Partial; missing template constraints" },
+        { "min": 8, "max": 10, "criteria": "Complete; enforceable rules" }
+      ]
+    },
+    {
+      "id": "versioning_changelog",
+      "points": 10,
+      "hard_fails": ["No changelog requirement for pack changes"],
+      "score_guide": [
+        { "min": 0, "max": 3, "criteria": "Absent" },
+        { "min": 4, "max": 7, "criteria": "Present but vague" },
+        { "min": 8, "max": 10, "criteria": "Explicit and enforceable" }
+      ]
+    },
+    {
+      "id": "example_traceability",
+      "points": 10,
+      "hard_fails": ["Examples contain ad-hoc values that violate token discipline"],
+      "score_guide": [
+        { "min": 0, "max": 3, "criteria": "No examples" },
+        { "min": 4, "max": 7, "criteria": "Examples exist but not mapped or inconsistent" },
+        { "min": 8, "max": 10, "criteria": "Mapped, copyable, consistent" }
+      ]
+    }
+  ]
+}

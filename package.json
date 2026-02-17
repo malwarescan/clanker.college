@@ -1,0 +1,42 @@
+{
+  "name": "clanker-college",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "db:generate": "pnpm --filter @clanker/db exec prisma generate",
+    "db:migrate": "dotenv -e .env -- pnpm --filter @clanker/db exec prisma migrate deploy",
+    "db:seed": "dotenv -e .env -- pnpm --filter @clanker/db exec tsx prisma/seed.ts",
+    "vocab:lint": "pnpm --filter @clanker/shared run vocab:lint",
+    "qa:pack": "pnpm run qa:pack:vocab && pnpm run qa:pack:smoke && pnpm run qa:pack:validator",
+    "qa:pack:vocab": "pnpm vocab:lint",
+    "qa:pack:smoke": "pnpm exec playwright test --project=chromium",
+    "qa:pack:validator": "tsx scripts/qa-pack-validator.ts",
+    "pack:init": "tsx scripts/pack-init.ts",
+    "pack:validate": "tsx scripts/pack-validate.ts",
+    "pack:build": "tsx scripts/pack-build.ts",
+    "pack:publish": "dotenv -e .env -- tsx scripts/pack-publish.ts",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-s3": "^3.0.0",
+    "dotenv-cli": "^7.4.2",
+    "stripe": "^17.0.0",
+    "@playwright/test": "^1.49.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.2.0",
+    "turbo": "^2.8.9",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.3"
+  },
+  "lint-staged": {
+    "apps/web/**": "pnpm vocab:lint",
+    "docs/**": "pnpm vocab:lint"
+  },
+  "packageManager": "pnpm@9.14.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

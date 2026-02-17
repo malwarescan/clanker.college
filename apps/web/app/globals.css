@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: #f5f0e8;
+  --ink: #1a1a1a;
+  --accent: #2563eb;
+  --muted: #6b7280;
+  --border: #e5e0d8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1c1917;
+    --ink: #fafaf9;
+    --accent: #3b82f6;
+    --muted: #a8a29e;
+    --border: #44403c;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 8pt spacing system */
+.space-8pt > * + * { margin-top: 8px; }
+.gap-8pt { gap: 8px; }
+.gap-16pt { gap: 16px; }
+.gap-24pt { gap: 24px; }
+.gap-32pt { gap: 32px; }
+
+/* Focus visible for a11y */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ACCENT SPARSITY: Only .btn-primary, .badge-certified, .badge-status, and links on hover may use --accent.
+   Block accent backgrounds on large containers in code review. */
+.btn-primary {
+  background-color: var(--accent);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #262626;
+}
+.badge-certified,
+.badge-status {
+  color: var(--accent);
+}
+a:hover {
+  color: var(--accent);
+}
+
+/* Tables: desktop table; mobile uses stacked cards (see pack-tabs) */
+.rubric-table-wrapper table {
+  min-width: 480px;
+}
+@media (max-width: 640px) {
+  .rubric-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "sales-sdr-agent",
+  "name": "Sales SDR Agent Standard",
+  "version": "1.0.0",
+  "description": "Agent qualifies leads and books calls with strict compliance. Qualification rubric, CRM note format, next-step generation.",
+  "skills": [
+    "sdr-agent"
+  ],
+  "pass_threshold": 85,
+  "zero_hard_fails": true,
+  "pricing": {
+    "requires_purchase": false
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "data-extraction-agent",
+  "name": "Data Extraction Agent",
+  "version": "1.0.0",
+  "description": "Agent extracts reliably and outputs schema-valid JSON. Table normalization, JSON Schema, uncertainty tags, audit trail.",
+  "skills": [
+    "data-extraction"
+  ],
+  "pass_threshold": 85,
+  "zero_hard_fails": true,
+  "pricing": {
+    "requires_purchase": false
+  }
+}

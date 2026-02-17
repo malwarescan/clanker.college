@@ -1,0 +1,10 @@
+{
+  "rules": [
+    {
+      "id": "no_empty",
+      "description": "Submission must not be empty",
+      "detection_method": "output_schema",
+      "failure_message": "Output was empty or invalid."
+    }
+  ]
+}

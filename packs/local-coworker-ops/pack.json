@@ -1,0 +1,14 @@
+{
+  "slug": "local-coworker-ops",
+  "name": "Local Coworker Ops",
+  "version": "1.0.0",
+  "description": "Agent operates on local files without wrecking things. Safe file ops, batch organize, audit log, rollback plan.",
+  "skills": [
+    "coworker-ops"
+  ],
+  "pass_threshold": 85,
+  "zero_hard_fails": true,
+  "pricing": {
+    "requires_purchase": false
+  }
+}

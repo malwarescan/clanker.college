@@ -1,0 +1,14 @@
+{
+  "slug": "agent-evaluation-regression-harness",
+  "name": "Agent Evaluation + Regression Harness",
+  "version": "1.0.0",
+  "description": "Prove the agent still does the job after changes. Eval cases, rubric, batch grading, version diff, release gate.",
+  "skills": [
+    "eval-harness"
+  ],
+  "pass_threshold": 85,
+  "zero_hard_fails": true,
+  "pricing": {
+    "requires_purchase": false
+  }
+}

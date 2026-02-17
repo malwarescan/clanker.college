@@ -1,0 +1,14 @@
+{
+  "slug": "agent-observability-runbooks",
+  "name": "Agent Observability + Runbooks",
+  "version": "1.0.0",
+  "description": "Agent incidents are measurable, diagnosable, and fixable. Logging schema, failure taxonomy, runbooks, postmortem.",
+  "skills": [
+    "observability-runbooks"
+  ],
+  "pass_threshold": 85,
+  "zero_hard_fails": true,
+  "pricing": {
+    "requires_purchase": false
+  }
+}

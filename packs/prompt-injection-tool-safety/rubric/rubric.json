@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "max_score": 100,
+  "pass_score": 85,
+  "criteria": [
+    {
+      "id": "criterion_1",
+      "name": "Criterion 1",
+      "weight": 50,
+      "scoring_method": "binary"
+    },
+    {
+      "id": "criterion_2",
+      "name": "Criterion 2",
+      "weight": 50,
+      "scoring_method": "binary"
+    }
+  ],
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "output_text": { "type": "string" }
+    },
+    "required": ["output_text"]
+  }
+}

@@ -1,0 +1,180 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Org {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  users     User[]
+  submissions Submission[]
+  certificates Certificate[]
+
+  @@map("orgs")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  clerkId      String        @unique @map("clerk_id")
+  email        String?
+  orgId        String?       @map("org_id")
+  role         String        @default("member")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  org          Org?          @relation(fields: [orgId], references: [id])
+  entitlements Entitlement[]
+
+  @@map("users")
+}
+
+model Pack {
+  id           String        @id @default(cuid())
+  slug         String        @unique
+  title        String
+  schoolSlug   String        @map("school_slug")
+  summary      String?
+  createdAt    DateTime      @default(now()) @map("created_at")
+  versions     PackVersion[]
+  submissions  Submission[]
+  certificates Certificate[]
+  product      Product?
+  entitlements Entitlement[]
+
+  @@map("packs")
+}
+
+model Product {
+  id               String   @id @default(cuid())
+  stripeProductId String   @unique @map("stripe_product_id")
+  stripePriceId   String   @map("stripe_price_id")
+  packId           String   @unique @map("pack_id")
+  pack             Pack     @relation(fields: [packId], references: [id], onDelete: Cascade)
+
+  @@map("products")
+}
+
+model Entitlement {
+  id        String    @id @default(cuid())
+  userId    String    @map("user_id")
+  packId    String    @map("pack_id")
+  status    String    @default("active") // active | revoked
+  source    String    // stripe | comped | admin
+  createdAt DateTime  @default(now()) @map("created_at")
+  expiresAt DateTime? @map("expires_at")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pack      Pack      @relation(fields: [packId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, packId])
+  @@map("entitlements")
+}
+
+model PackVersion {
+  id                  String    @id @default(cuid())
+  packId              String    @map("pack_id")
+  version             String    // semver e.g. "1.0.0"
+  lastUpdatedAt       DateTime  @default(now()) @map("last_updated_at")
+  status              String    @default("DRAFT") // DRAFT | PUBLISHED | CERTIFIED
+  publishedAt         DateTime? @map("published_at")
+  certifiedAt         DateTime? @map("certified_at")
+  outcomesJson        Json?     @map("outcomes_json")
+  syllabusMd          String?   @db.Text @map("syllabus_md")
+  installMd           String?   @db.Text @map("install_md")
+  rubricJson          Json?     @map("rubric_json")
+  isCertifiedDefault  Boolean?  @default(true) @map("is_certified_default")
+  artifactZipUrl      String?   @map("artifact_zip_url")
+  artifactPluginUrl   String?   @map("artifact_plugin_url")
+  artifactGitUrl      String?   @map("artifact_git_url")
+  pack                Pack      @relation(fields: [packId], references: [id], onDelete: Cascade)
+  labs                Lab[]
+  examples            Example[]
+  submissions         Submission[]
+  certificates        Certificate[]
+
+  @@unique([packId, version])
+  @@map("pack_versions")
+}
+
+model Lab {
+  id                String   @id @default(cuid())
+  packVersionId     String   @map("pack_version_id")
+  labSlug           String   @map("lab_slug")
+  title             String
+  promptMd          String?  @db.Text @map("prompt_md")
+  submissionSchemaJson Json?  @map("submission_schema_json")
+  passThreshold     Int      @default(85) @map("pass_threshold")
+  packVersion       PackVersion @relation(fields: [packVersionId], references: [id], onDelete: Cascade)
+  submissions       Submission[]
+
+  @@unique([packVersionId, labSlug])
+  @@map("labs")
+}
+
+model Example {
+  id             String   @id @default(cuid())
+  packVersionId  String   @map("pack_version_id")
+  examplesNdjson String?  @db.Text @map("examples_ndjson")
+  packVersion    PackVersion @relation(fields: [packVersionId], references: [id], onDelete: Cascade)
+
+  @@unique([packVersionId])
+  @@map("examples")
+}
+
+model Submission {
+  id             String   @id @default(cuid())
+  orgId          String?  @map("org_id")
+  packId         String   @map("pack_id")
+  packVersionId  String   @map("pack_version_id")
+  labId          String   @map("lab_id")
+  agentId        String?  @map("agent_id")
+  payloadJson    Json     @map("payload_json")
+  status         String   @default("queued") // queued | graded
+  createdAt      DateTime @default(now()) @map("created_at")
+  org            Org?     @relation(fields: [orgId], references: [id])
+  pack           Pack     @relation(fields: [packId], references: [id])
+  packVersion    PackVersion @relation(fields: [packVersionId], references: [id])
+  lab            Lab      @relation(fields: [labId], references: [id])
+  grade          Grade?
+  certificate    Certificate?
+
+  @@map("submissions")
+}
+
+model Grade {
+  id                    String   @id @default(cuid())
+  submissionId          String   @unique @map("submission_id")
+  result                String   // PASS | PROVISIONAL | FAIL
+  scoreTotal            Int      @map("score_total")
+  scoreByDimensionJson  Json     @map("score_by_dimension_json")
+  dimensionReasonsJson  Json?    @map("dimension_reasons_json")
+  hardFailsJson         Json     @map("hard_fails_json")
+  changelogDeltaJson    Json?    @map("changelog_delta_json")
+  gradedAt              DateTime @default(now()) @map("graded_at")
+  submission            Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@map("grades")
+}
+
+model Certificate {
+  id                  String   @id @default(cuid())
+  orgId               String?  @map("org_id")
+  agentId             String?  @map("agent_id")
+  packId              String   @map("pack_id")
+  packVersionId       String   @map("pack_version_id")
+  submissionId        String?  @unique @map("submission_id")
+  scoreTotal          Int      @map("score_total")
+  scoreByDimensionJson Json    @map("score_by_dimension_json")
+  hardFailsJson       Json?    @map("hard_fails_json")
+  issuedAt            DateTime @default(now()) @map("issued_at")
+  signature           String?  @db.Text
+  verifyHash          String?  @map("verify_hash")
+  org                 Org?     @relation(fields: [orgId], references: [id])
+  pack                Pack     @relation(fields: [packId], references: [id])
+  packVersion         PackVersion @relation(fields: [packVersionId], references: [id])
+  submission          Submission? @relation(fields: [submissionId], references: [id])
+
+  @@map("certificates")
+}

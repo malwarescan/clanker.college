@@ -1,0 +1,54 @@
+{
+  "agent-observability-runbooks": {
+    "stripeProductId": "prod_TzfOcA5WS8dfz2",
+    "stripePriceId": "price_1T1g3ZABWpz3awi2YmlrkeQX"
+  },
+  "data-extraction-agent": {
+    "stripeProductId": "prod_TzfNkTfCrP6cOf",
+    "stripePriceId": "price_1T1g2VABWpz3awi2F3lkx93B"
+  },
+  "x-twitter-operator": {
+    "stripeProductId": "prod_TzfMeCfeZBG344",
+    "stripePriceId": "price_1T1g1PABWpz3awi2x19vX73u"
+  },
+  "content-ops-agent": {
+    "stripeProductId": "prod_TzfLgRxdtiU11B",
+    "stripePriceId": "price_1T1g0QABWpz3awi2wsDKiH3e"
+  },
+  "sales-sdr-agent": {
+    "stripeProductId": "prod_TzfJ8rfS5KgxuY",
+    "stripePriceId": "price_1T1fz9ABWpz3awi2eWyBCijG"
+  },
+  "support-agent-standard": {
+    "stripeProductId": "prod_TzfIALNalfycR0",
+    "stripePriceId": "price_1T1fxrABWpz3awi2FH7EBDgR"
+  },
+  "inbox-calendar-triage": {
+    "stripeProductId": "prod_TzfHQYbm9hjlCs",
+    "stripePriceId": "price_1T1fwkABWpz3awi21i9bBiGD"
+  },
+  "local-coworker-ops": {
+    "stripeProductId": "prod_TzfFTaAqOA2qvM",
+    "stripePriceId": "price_1T1fvHABWpz3awi2mhxOaZj2"
+  },
+  "plugin-packaging-distribution": {
+    "stripeProductId": "prod_TzfET7DHS11lQg",
+    "stripePriceId": "price_1T1fuLABWpz3awi27HBkTBPT"
+  },
+  "claude-skills-authoring": {
+    "stripeProductId": "prod_TzfCmqGYlQjVgL",
+    "stripePriceId": "price_1T1fsxABWpz3awi2fIfkz5XE"
+  },
+  "prompt-injection-tool-safety": {
+    "stripeProductId": "prod_TzfBRQKNAMmtPH",
+    "stripePriceId": "price_1T1frHABWpz3awi2EPwm9vUH"
+  },
+  "agent-evaluation-regression-harness": {
+    "stripeProductId": "prod_Tzf9qlgKNDU0eu",
+    "stripePriceId": "price_1T1fpaABWpz3awi2gRBwxll1"
+  },
+  "design-systems": {
+    "stripeProductId": "prod_Tzf8ZEMkwgOwoX",
+    "stripePriceId": "price_1T1fo3ABWpz3awi2oHwFI6dB"
+  }
+}

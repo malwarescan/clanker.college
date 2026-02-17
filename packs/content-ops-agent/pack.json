@@ -1,0 +1,14 @@
+{
+  "slug": "content-ops-agent",
+  "name": "Content Ops Agent",
+  "version": "1.0.0",
+  "description": "Agent produces publish-ready content that passes QA. Brief extraction, outline rubric, fact-check, metadata, QA checklist.",
+  "skills": [
+    "content-ops"
+  ],
+  "pass_threshold": 85,
+  "zero_hard_fails": true,
+  "pricing": {
+    "requires_purchase": false
+  }
+}

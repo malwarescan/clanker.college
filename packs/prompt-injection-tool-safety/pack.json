@@ -1,0 +1,14 @@
+{
+  "slug": "prompt-injection-tool-safety",
+  "name": "Prompt Injection + Tool Safety Hardening",
+  "version": "1.0.0",
+  "description": "Agent refuses malicious instructions and unsafe actions. Injection detection, safe browsing, file constraints, allowlists.",
+  "skills": [
+    "safety-hardening"
+  ],
+  "pass_threshold": 85,
+  "zero_hard_fails": true,
+  "pricing": {
+    "requires_purchase": false
+  }
+}

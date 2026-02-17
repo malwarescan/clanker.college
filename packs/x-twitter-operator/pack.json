@@ -1,0 +1,14 @@
+{
+  "slug": "x-twitter-operator",
+  "name": "X/Twitter Operator Agent",
+  "version": "1.0.0",
+  "description": "Agent operates X without getting you banned or cringe. Reply policy, escalation, thread summarizer, brand voice.",
+  "skills": [
+    "twitter-operator"
+  ],
+  "pass_threshold": 85,
+  "zero_hard_fails": true,
+  "pricing": {
+    "requires_purchase": false
+  }
+}

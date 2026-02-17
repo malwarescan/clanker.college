@@ -1,0 +1,14 @@
+{
+  "slug": "claude-skills-authoring",
+  "name": "Claude Skills Authoring Standard (SKILL.md)",
+  "version": "1.0.0",
+  "description": "Write skills that auto-invoke correctly and stay deterministic. Frontmatter, triggers, steps, output schema.",
+  "skills": [
+    "skill-authoring"
+  ],
+  "pass_threshold": 85,
+  "zero_hard_fails": true,
+  "pricing": {
+    "requires_purchase": false
+  }
+}

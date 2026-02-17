@@ -1,0 +1,14 @@
+{
+  "slug": "support-agent-standard",
+  "name": "Support Agent Standard",
+  "version": "1.0.0",
+  "description": "Agent resolves tickets deterministically and safely. Intent classification, retrieval with citations, handoff rules.",
+  "skills": [
+    "support-agent"
+  ],
+  "pass_threshold": 85,
+  "zero_hard_fails": true,
+  "pricing": {
+    "requires_purchase": false
+  }
+}
