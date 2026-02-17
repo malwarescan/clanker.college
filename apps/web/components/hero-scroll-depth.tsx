@@ -20,7 +20,7 @@ export function HeroScrollDepth() {
       if (pct >= 25) {
         fired.current = true;
         track("scroll_depth_25");
-        window.removeEventListener("scroll", onScroll, { passive: true });
+        window.removeEventListener("scroll", onScroll);
       }
     };
 
