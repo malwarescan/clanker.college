@@ -33,7 +33,7 @@ function getHostedSignInRedirect(req: NextRequest): string {
 export async function middleware(req: NextRequest, event: NextFetchEvent) {
   if (!clerkEnabled) return NextResponse.next();
   const { clerkMiddleware, createRouteMatcher } = await import("@clerk/nextjs/server");
-  // Marketing and public routes; /account is protected when using hosted portal.
+  // Public routes: marketing + auth callback + API (webhooks, etc.). /account is protected when using hosted portal.
   const isPublicRoute = createRouteMatcher([
     "/",
     "/auth(.*)",
@@ -44,21 +44,22 @@ export async function middleware(req: NextRequest, event: NextFetchEvent) {
     "/schools(.*)",
     "/certification(.*)",
     "/verify(.*)",
-    // When using hosted portal, /account is protected below. When not, allow /account for in-app SignIn.
     ...(ACCOUNT_PORTAL_BASE ? [] : ["/account(.*)"]),
   ]);
   const isAccountRoute = createRouteMatcher(["/account(.*)"]);
 
   return clerkMiddleware(
     async (auth, req) => {
-      if (isPublicRoute(req)) return;
-      // Protect /account when using hosted portal: redirect to accounts.clanker.college/sign-in
+      if (isPublicRoute(req)) return NextResponse.next();
+
       if (ACCOUNT_PORTAL_BASE && isAccountRoute(req)) {
         const hostedSignInUrl = getHostedSignInRedirect(req);
         await auth.protect({ unauthenticatedUrl: hostedSignInUrl });
-        return;
+        return NextResponse.next();
       }
+
       await auth.protect();
+      return NextResponse.next();
     },
     { authorizedParties }
   )(req, event);

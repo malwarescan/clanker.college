@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title: "Clanker.College — Skill Packs for Agents",
   description: "Versioned, deterministic training modules. Syllabus, Labs, Rubric, Certification.",
   icons: {
-    icon: "/icon.png",
+    icon: "/favicon.ico",
     shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
@@ -49,9 +49,28 @@ export default function RootLayout({
     </html>
   );
   if (!isClerkEnabled()) return body;
+
+  const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const domain = process.env.NEXT_PUBLIC_CLERK_DOMAIN;
+  const isSatellite = process.env.NEXT_PUBLIC_CLERK_IS_SATELLITE === "true";
+  const signInUrl = process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL;
+  const signUpUrl = process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL;
+  const afterSignInUrl = process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL;
+  const afterSignUpUrl = process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL;
+
   return (
     <ClerkErrorBoundary fallback={body}>
-      <ClerkProvider>{body}</ClerkProvider>
+      <ClerkProvider
+        publishableKey={publishableKey}
+        domain={domain || undefined}
+        isSatellite={isSatellite}
+        signInUrl={signInUrl || undefined}
+        signUpUrl={signUpUrl || undefined}
+        afterSignInUrl={afterSignInUrl || undefined}
+        afterSignUpUrl={afterSignUpUrl || undefined}
+      >
+        {body}
+      </ClerkProvider>
     </ClerkErrorBoundary>
   );
 }

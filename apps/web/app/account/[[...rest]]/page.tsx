@@ -6,6 +6,7 @@ import { isClerkEnabled } from "@/lib/clerk-env";
 import { useHostedAccountPortal, getHostedSignInUrl } from "@/lib/clerk-hosted";
 import { getActiveSubscription } from "@/lib/entitlements";
 import { AuthCard } from "@/components/auth-card";
+import { AccountGate } from "@/components/account-gate";
 import { AccountSubscriptionCard } from "@/components/account-subscription-card";
 import { AccountInstallsCard } from "@/components/account-installs-card";
 import { AccountCertificatesCard } from "@/components/account-certificates-card";
@@ -82,15 +83,17 @@ export default async function AccountPage({
   ]);
 
   return (
-    <div className="mx-auto max-w-read px-[var(--mobile-padding)] py-10 sm:px-6">
-      <h1 className="text-2xl font-semibold text-[var(--ink)]">Account</h1>
-      <p className="mt-2 text-[var(--muted)]">Billing, installs, and certificates.</p>
+    <AccountGate>
+      <div className="mx-auto max-w-read px-[var(--mobile-padding)] py-10 sm:px-6">
+        <h1 className="text-2xl font-semibold text-[var(--ink)]">Account</h1>
+        <p className="mt-2 text-[var(--muted)]">Billing, installs, and certificates.</p>
 
-      <div className="mt-10 space-y-8">
-        <AccountSubscriptionCard userId={user.id} subscription={subscription} />
-        <AccountInstallsCard />
-        <AccountCertificatesCard certificates={certificates} />
+        <div className="mt-10 space-y-8">
+          <AccountSubscriptionCard userId={user.id} subscription={subscription} />
+          <AccountInstallsCard />
+          <AccountCertificatesCard certificates={certificates} />
+        </div>
       </div>
-    </div>
+    </AccountGate>
   );
 }
