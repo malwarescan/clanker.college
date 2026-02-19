@@ -50,25 +50,12 @@ export default function RootLayout({
   );
   if (!isClerkEnabled()) return body;
 
-  const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-  const domain = process.env.NEXT_PUBLIC_CLERK_DOMAIN;
+  const domain = process.env.NEXT_PUBLIC_CLERK_DOMAIN?.trim() || undefined;
   const isSatellite = process.env.NEXT_PUBLIC_CLERK_IS_SATELLITE === "true";
-  const signInUrl = process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL;
-  const signUpUrl = process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL;
-  const afterSignInUrl = process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL;
-  const afterSignUpUrl = process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL;
 
   return (
     <ClerkErrorBoundary fallback={body}>
-      <ClerkProvider
-        publishableKey={publishableKey}
-        domain={domain || undefined}
-        isSatellite={isSatellite}
-        signInUrl={signInUrl || undefined}
-        signUpUrl={signUpUrl || undefined}
-        afterSignInUrl={afterSignInUrl || undefined}
-        afterSignUpUrl={afterSignUpUrl || undefined}
-      >
+      <ClerkProvider domain={domain} isSatellite={isSatellite}>
         {body}
       </ClerkProvider>
     </ClerkErrorBoundary>
