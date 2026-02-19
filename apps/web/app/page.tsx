@@ -3,7 +3,6 @@ import { getPacksWithLatestVersion } from "@/lib/packs";
 import { prisma } from "@/lib/db";
 import { HeroActions } from "@/components/hero-actions";
 import { HeroScrollDepth } from "@/components/hero-scroll-depth";
-import { HeroVerifyLink } from "@/components/hero-verify-link";
 
 const FEATURED_SLUG = "design-systems";
 
@@ -24,10 +23,17 @@ async function getExampleCertificate() {
 }
 
 export default async function HomePage() {
-  const [packs, exampleCert] = await Promise.all([
-    getPacksWithLatestVersion(),
-    getExampleCertificate(),
-  ]);
+  let packs: Awaited<ReturnType<typeof getPacksWithLatestVersion>> = [];
+  let exampleCert: Awaited<ReturnType<typeof getExampleCertificate>> = null;
+  try {
+    [packs, exampleCert] = await Promise.all([
+      getPacksWithLatestVersion(),
+      getExampleCertificate(),
+    ]);
+  } catch (e) {
+    // DB unreachable, missing DATABASE_URL, or migrations not run — show page with empty state
+    console.error("HomePage data fetch failed:", e);
+  }
   const featured = packs.slice(0, 6);
   const firstPackSlug = featured[0]?.slug ?? FEATURED_SLUG;
   const verifyHref = exampleCert ? `/verify/${exampleCert.certId}` : "/certification#certificate-preview";
@@ -35,23 +41,38 @@ export default async function HomePage() {
   return (
     <div>
       <HeroScrollDepth />
-      {/* Hero — minimal: H1, one line, two CTAs, optional one-line proof */}
+      {/* Hero — mobile-first: H1, 1 subhead, 2 CTAs, proof chip, example cert card */}
       <section className="border-b border-[var(--border)] bg-[var(--paper)]">
-        <div className="mx-auto max-w-site px-4 py-14 sm:px-6 sm:py-20">
+        <div className="mx-auto max-w-site px-[var(--mobile-padding)] py-6 sm:px-6 sm:py-20">
           <div className="max-w-[60ch]">
-            <h1 className="text-3xl font-semibold tracking-tight text-[var(--ink)] sm:text-4xl">
+            <h1 className="hero-h1 text-3xl font-semibold tracking-tight text-[var(--ink)] sm:text-4xl">
               Skill packs for agents. Versioned. Deterministic.
             </h1>
-            <p className="mt-2 text-[var(--ink)]/90 sm:text-lg">
+            <p className="hero-subhead mt-2 text-[var(--ink)]/90 sm:text-lg">
               Labs + rubrics that prevent drift. Verifiable certificates.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <HeroActions />
             </div>
-            <p className="mt-4 text-sm text-[var(--muted)]">
-              <HeroVerifyLink href={verifyHref} />
-              {exampleCert != null ? ` — ${exampleCert.scoreTotal}/100 Pass` : " — 92/100 Pass"}
-            </p>
+            <Link
+              href={verifyHref}
+              className="mt-4 inline-flex min-h-[var(--touch-min)] items-center rounded-full border border-[var(--border)] bg-[var(--paper)] px-4 py-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+            >
+              Public certificate verification
+            </Link>
+            {exampleCert && (
+              <Link
+                href={verifyHref}
+                className="mt-6 flex flex-col rounded-lg border border-[var(--border)] bg-[var(--paper)] p-4 sm:mt-8"
+              >
+                <span className="text-xs font-medium text-[var(--muted)]">Example certificate</span>
+                <span className="mt-1 font-medium text-[var(--ink)]">{exampleCert.packTitle}</span>
+                <span className="text-sm text-[var(--muted)]">v{exampleCert.version} · {exampleCert.scoreTotal}/100 {exampleCert.passed ? "Pass" : ""}</span>
+                <span className="mt-3 inline-flex min-h-[44px] items-center justify-center self-start rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white">
+                  Verify
+                </span>
+              </Link>
+            )}
           </div>
         </div>
       </section>

@@ -1,21 +1,29 @@
 /**
- * Lightweight event dispatch for hero and scroll instrumentation.
+ * Lightweight event dispatch for conversion tuning.
  * Listen for "clanker_track" on window to send to GTM, Plausible, etc.
  */
-export type HeroEventName =
+export type TrackEventName =
   | "hero_primary_cta_click"
   | "hero_secondary_cta_click"
   | "hero_verify_click"
-  | "scroll_depth_25";
+  | "scroll_depth_25"
+  | "account_google_click"
+  | "account_magiclink_submit"
+  | "checkout_start"
+  | "checkout_success"
+  | "locked_pack_click"
+  | "install_tab_view"
+  | "install_download_click";
 
-export function track(eventName: HeroEventName): void {
+export function track(
+  eventName: TrackEventName,
+  detail?: Record<string, unknown>
+): void {
   if (typeof window === "undefined") return;
   try {
     window.dispatchEvent(
-      new CustomEvent("clanker_track", { detail: { event: eventName } })
+      new CustomEvent("clanker_track", { detail: { event: eventName, ...detail } })
     );
-    // Optional: gtag, plausible, etc. can be wired here
-    // if (typeof window.gtag === "function") window.gtag("event", eventName);
   } catch {
     // no-op
   }

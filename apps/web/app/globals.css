@@ -8,6 +8,12 @@
   --accent: #2563eb;
   --muted: #6b7280;
   --border: #e5e0d8;
+  /* Mobile-first: 4px grid, directive defaults */
+  --mobile-padding: 16px;
+  --section-tight: 24px;
+  --section-normal: 32px;
+  --touch-min: 44px;
+  --max-readable-mobile: 48ch;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,6 +32,7 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -33,6 +40,41 @@ body {
   color: var(--ink);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+  min-width: 0;
+}
+
+/* Mobile-first: prevent horizontal overflow */
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Mobile-first typography (directive: H1 28–32px, subhead 15–16px, body 14–15px) */
+@media (max-width: 767px) {
+  .hero-h1 {
+    font-size: clamp(1.75rem, 5vw, 2rem);
+    line-height: 1.2;
+    max-inline-size: var(--max-readable-mobile);
+  }
+  .hero-subhead {
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    max-inline-size: var(--max-readable-mobile);
+  }
+}
+
+/* Mobile: full-width primary buttons, min 44px */
+@media (max-width: 767px) {
+  .mobile-cta-primary {
+    min-height: var(--touch-min);
+    width: 100%;
+    justify-content: center;
+  }
+  .mobile-cta-secondary {
+    min-height: var(--touch-min);
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* 8pt spacing system */
@@ -65,6 +107,85 @@ button:focus-visible,
 }
 a:hover {
   color: var(--accent);
+}
+
+/* Header auth: Sign in / Sign up as text links (same weight as center nav) */
+.header-auth-link a,
+.header-auth-link button {
+  display: inline-flex !important;
+  min-height: 44px !important;
+  min-width: 44px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  text-decoration: none !important;
+  color: var(--ink) !important;
+  background: none !important;
+  border: none !important;
+  cursor: pointer;
+  padding: 0;
+}
+.header-auth-link a:hover,
+.header-auth-link button:hover {
+  color: var(--accent) !important;
+}
+
+/* Clerk SignIn on /account: mobile-first full width, fix card layout */
+.auth-card-clerk,
+.auth-card-clerk * {
+  box-sizing: border-box;
+}
+.auth-card-clerk,
+.auth-card-clerk > *,
+.auth-card-clerk > * > *,
+.auth-card-clerk > * > * > *,
+.auth-card-clerk [class*="cl-"],
+.auth-card-clerk [class*="clerk"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+.auth-card-clerk div[style*="max-width"],
+.auth-card-clerk [class*="card"] {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+/* Clerk form: touch-friendly on mobile */
+.auth-card-clerk input,
+.auth-card-clerk button[type="submit"],
+.auth-card-clerk [role="button"] {
+  min-height: 44px !important;
+  padding: 0.5rem 0.75rem !important;
+}
+.auth-card-clerk .cl-formFieldInput,
+.auth-card-clerk .cl-input {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Pack tabs: on mobile use segmented control (pill group) */
+@media (max-width: 767px) {
+  .pack-tabs-segmented {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 4px;
+    border-radius: 0.5rem;
+    background: var(--border);
+  }
+  .pack-tabs-segmented [role="tab"] {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: var(--touch-min);
+    border-radius: 0.375rem;
+    border: none;
+  }
+  .pack-tabs-segmented [role="tab"][aria-selected="true"] {
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  }
 }
 
 /* Tables: desktop table; mobile uses stacked cards (see pack-tabs) */

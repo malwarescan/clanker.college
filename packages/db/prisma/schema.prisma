@@ -19,16 +19,34 @@ model Org {
 }
 
 model User {
-  id           String        @id @default(cuid())
-  clerkId      String        @unique @map("clerk_id")
-  email        String?
-  orgId        String?       @map("org_id")
-  role         String        @default("member")
-  createdAt    DateTime      @default(now()) @map("created_at")
-  org          Org?          @relation(fields: [orgId], references: [id])
-  entitlements Entitlement[]
+  id                String         @id @default(cuid())
+  clerkId           String         @unique @map("clerk_id")
+  email             String?
+  orgId             String?        @map("org_id")
+  role              String         @default("member")
+  stripeCustomerId  String?        @unique @map("stripe_customer_id")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  org               Org?           @relation(fields: [orgId], references: [id])
+  entitlements      Entitlement[]
+  subscriptions     Subscription[]
 
   @@map("users")
+}
+
+model Subscription {
+  id                     String    @id @default(cuid())
+  userId                 String    @map("user_id")
+  plan                   String    // individual_monthly | individual_annual | team_monthly
+  status                 String    // active | canceled | past_due
+  stripeCustomerId       String?   @map("stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map("stripe_subscription_id")
+  currentPeriodEnd       DateTime? @map("current_period_end")
+  createdAt              DateTime  @default(now()) @map("created_at")
+  updatedAt              DateTime  @updatedAt @map("updated_at")
+  user                   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, plan])
+  @@map("subscriptions")
 }
 
 model Pack {

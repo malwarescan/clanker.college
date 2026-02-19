@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getPackBySlug } from "@/lib/packs";
-import { getUserIdFromClerk, hasActiveEntitlement } from "@/lib/entitlements";
+import { getUserIdFromClerk, hasAccessToPack } from "@/lib/entitlements";
 import { absoluteUrl } from "@/lib/base-url";
 
 /** Entitlement-gated install: returns artifact URLs and instructions only when entitled (or pack does not require purchase). */
@@ -32,15 +32,16 @@ export async function GET(
         { status: 403 }
       );
     }
-    const entitled = await hasActiveEntitlement(userId, pack.id);
+    const entitled = await hasAccessToPack(userId, pack.id);
     if (!entitled) {
       return NextResponse.json(
         {
           error: "ENTITLEMENT_REQUIRED",
+          plan: "individual",
           packSlug: pack.slug,
           packName: pack.title,
           stripePriceId: (pack.product as { stripePriceId?: string } | null)?.stripePriceId ?? null,
-          message: "Purchase this pack to access install artifacts.",
+          message: "Start a subscription or purchase this pack to access install artifacts.",
         },
         { status: 403 }
       );

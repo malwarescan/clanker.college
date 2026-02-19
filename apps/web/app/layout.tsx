@@ -8,10 +8,13 @@
  * - Campus Grid motif ONLY in hero / certificates / cover art.
  * - One primary CTA above the fold. Tables mobile-readable (cards or clean scroll).
  */
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
+import { ConditionalFooter } from "@/components/conditional-footer";
+import { ClerkErrorBoundary } from "@/components/clerk-error-boundary";
+import { isClerkEnabled } from "@/lib/clerk-env";
 
 export const dynamic = "force-dynamic";
 
@@ -25,18 +28,30 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
+  const body = (
     <html lang="en">
       <body>
         <Header />
         <main>{children}</main>
-        <Footer />
+        <ConditionalFooter />
       </body>
     </html>
+  );
+  if (!isClerkEnabled()) return body;
+  return (
+    <ClerkErrorBoundary fallback={body}>
+      <ClerkProvider>{body}</ClerkProvider>
+    </ClerkErrorBoundary>
   );
 }

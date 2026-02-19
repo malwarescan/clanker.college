@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { getPackBySlug } from "@/lib/packs";
 import { getUserIdFromClerk, getEntitlementStatus } from "@/lib/entitlements";
 import { PackTabs } from "@/components/pack-tabs";
+import { BottomActionBar } from "@/components/bottom-action-bar";
 
 export default async function PackPage({ params }: { params: Promise<{ packSlug: string }> }) {
   const { packSlug } = await params;
@@ -27,7 +28,13 @@ export default async function PackPage({ params }: { params: Promise<{ packSlug:
   const examplesRow = v.examples?.[0];
 
   return (
-    <div className="mx-auto max-w-site px-4 py-10 sm:px-6">
+    <div className="mx-auto max-w-site px-4 py-10 pb-24 sm:px-6 md:pb-10">
+      <BottomActionBar
+        variant="pack"
+        signedIn={!!userId}
+        installState={installState}
+        packSlug={pack.slug}
+      />
       <div className="grid gap-10 lg:grid-cols-[1fr_320px]">
         <div className="min-w-0">
           {/* Above fold: title, version, last updated, outcomes, primary CTA, secondary CTA */}

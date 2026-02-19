@@ -2,10 +2,13 @@ import type { NextConfig } from "next";
 import path from "path";
 import { config } from "dotenv";
 
-// Load root .env and .env.local so DATABASE_URL (and others) are available to Prisma when using root env files
-const root = path.resolve(process.cwd(), "../..");
-config({ path: path.join(root, ".env") });
-config({ path: path.join(root, ".env.local") });
+// Load .env from app dir (apps/web) and monorepo root so env is found either way. .env.local overrides .env.
+const cwd = process.cwd();
+const root = path.resolve(cwd, "../..");
+for (const dir of [cwd, root]) {
+  config({ path: path.join(dir, ".env") });
+  config({ path: path.join(dir, ".env.local"), override: true });
+}
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@clanker/db", "@clanker/shared"],

@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { getHostedSignInUrl } from "@/lib/clerk-hosted";
+import { track } from "@/lib/analytics";
 
 const TABS = [
   { id: "syllabus", label: "Syllabus" },
@@ -51,8 +53,8 @@ export function PackTabs({
 
   return (
     <div className="mt-10">
-      <div className="border-b border-[var(--border)]" role="tablist" aria-label="Pack sections">
-        <div className="flex gap-1 overflow-x-auto">
+      <div className="pack-tabs-segmented border-b border-[var(--border)] sm:border-b-0 sm:bg-transparent sm:p-0" role="tablist" aria-label="Pack sections">
+        <div className="flex gap-1 overflow-x-auto sm:border-b sm:border-[var(--border)]">
           {TABS.map(({ id, label }) => (
             <button
               key={id}
@@ -269,6 +271,10 @@ function InstallPanel({
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (installState === "entitled") track("install_tab_view", { packSlug });
+  }, [installState, packSlug]);
+
+  useEffect(() => {
     if (installState !== "entitled") return;
     setLoading(true);
     fetch(`/api/packs/${packSlug}/install`)
@@ -284,10 +290,10 @@ function InstallPanel({
       <div className="rounded-lg border border-[var(--border)] bg-[var(--paper)] p-6">
         <p className="text-[var(--ink)]">Sign in to install this pack.</p>
         <Link
-          href="/account"
+          href={getHostedSignInUrl(`/packs/${packSlug}#panel-install`)}
           className="mt-4 inline-block rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
         >
-          Sign in
+          Sign in to install
         </Link>
       </div>
     );
@@ -297,10 +303,10 @@ function InstallPanel({
     const runCheckout = () => {
       setCheckoutError(null);
       setPurchasePending(true);
-      fetch("/api/checkout", {
+      fetch("/api/billing/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ packSlug }),
+        body: JSON.stringify({ plan: "individual_monthly" }),
       })
         .then((r) => r.json().then((data) => ({ status: r.status, data })))
         .then(({ status, data }: { status: number; data: { url?: string; error?: string } }) => {
@@ -320,14 +326,14 @@ function InstallPanel({
     };
     return (
       <div className="rounded-lg border border-[var(--border)] bg-[var(--paper)] p-6">
-        <p className="text-[var(--ink)]">Purchase this pack to access install artifacts.</p>
+        <p className="text-[var(--ink)]">Start a subscription to access install artifacts.</p>
         <button
           type="button"
           onClick={runCheckout}
           disabled={purchasePending}
           className="mt-4 rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-70"
         >
-          {purchasePending ? "Redirecting…" : "Purchase"}
+          {purchasePending ? "Redirecting…" : "Start subscription"}
         </button>
         {checkoutError && (
           <p className="mt-3 text-sm text-red-600" role="alert">
@@ -354,6 +360,7 @@ function InstallPanel({
         {payload.zipUrl && (
           <a
             href={payload.zipUrl}
+            onClick={() => track("install_download_click", { type: "zip", packSlug })}
             className="mt-3 inline-block rounded border border-[var(--border)] bg-[var(--paper)] px-3 py-1.5 text-sm font-medium text-[var(--ink)] hover:bg-[var(--border)]"
           >
             Download ZIP
