@@ -55,7 +55,8 @@ export default function RootLayout({
 
   return (
     <ClerkErrorBoundary fallback={body}>
-      <ClerkProvider domain={domain} isSatellite={isSatellite}>
+      {/* Clerk Next.js types require routerPush/routerReplace when custom props are used; App Router provides them at runtime. */}
+      <ClerkProvider {...({ domain, isSatellite } as Record<string, unknown>)}>
         {body}
       </ClerkProvider>
     </ClerkErrorBoundary>
